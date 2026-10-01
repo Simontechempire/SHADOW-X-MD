@@ -1,0 +1,79 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">SHADOW-X-MD profile picture</title>
+  <desc id="desc">Dark mysterious bot portrait with a large question mark and elegant suit</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#2b2d31"/>
+      <stop offset="35%" stop-color="#17191d"/>
+      <stop offset="100%" stop-color="#090b0e"/>
+    </linearGradient>
+
+    <radialGradient id="glow" cx="50%" cy="35%" r="50%">
+      <stop offset="0%" stop-color="#f7f7f7" stop-opacity="0.8"/>
+      <stop offset="40%" stop-color="#dfe4ea" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#dfe4ea" stop-opacity="0"/>
+    </radialGradient>
+
+    <linearGradient id="coat" x1="0" x2="1">
+      <stop offset="0%" stop-color="#1d2128"/>
+      <stop offset="100%" stop-color="#0a0d12"/>
+    </linearGradient>
+
+    <linearGradient id="shirt" x1="0" x2="1">
+      <stop offset="0%" stop-color="#f1efe9"/>
+      <stop offset="100%" stop-color="#d8d4cc"/>
+    </linearGradient>
+
+    <linearGradient id="tie" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#3d2b1f"/>
+      <stop offset="100%" stop-color="#1a0c09"/>
+    </linearGradient>
+
+    <filter id="blur-smoke" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+
+    <filter id="soft-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="#ffffff" flood-opacity="0.65"/>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" fill="url(#bg)"/>
+
+  <g opacity="0.75" filter="url(#blur-smoke)">
+    <ellipse cx="165" cy="104" rx="70" ry="34" fill="#f5f5f5" fill-opacity="0.25"/>
+    <ellipse cx="360" cy="96" rx="92" ry="40" fill="#e9ecef" fill-opacity="0.2"/>
+    <ellipse cx="255" cy="116" rx="120" ry="50" fill="#f1f3f5" fill-opacity="0.18"/>
+  </g>
+
+  <g>
+    <path d="M172 163 C172 121, 204 90, 255 90 C305 90, 338 121, 338 163 L338 208 C338 224, 325 236, 310 238 L310 298 C301 311, 286 319, 255 319 C224 319, 210 311, 200 298 L200 238 C186 236, 172 224, 172 208 Z"
+          fill="#0f1115"/>
+    <path d="M188 146 C201 110, 227 90, 255 90 C294 90, 318 116, 327 150 C320 134, 314 125, 302 119 C271 103, 228 104, 208 129 C198 140, 190 147, 188 146 Z"
+          fill="#291d17" opacity="0.8"/>
+    <path d="M206 158 C217 133, 238 118, 255 118 C273 118, 293 133, 303 158 C293 145, 276 139, 255 139 C235 139, 220 145, 206 158 Z"
+          fill="#3b2b21" opacity="0.72"/>
+
+    <ellipse cx="255" cy="99" rx="112" ry="68" fill="url(#glow)" opacity="0.42"/>
+
+    <g filter="url(#soft-glow)">
+      <text x="255" y="240" text-anchor="middle" font-size="180" font-family="Verdana, Arial, sans-serif" font-weight="700" fill="#ffffff">?</text>
+    </g>
+
+    <path d="M92 338 C150 292, 188 276, 255 276 C324 276, 366 292, 420 338 L420 466 L92 466 Z"
+          fill="url(#coat)"/>
+
+    <path d="M189 270 L255 224 L321 270 L295 466 L215 466 Z" fill="url(#shirt)"/>
+    <path d="M258 224 L285 272 L255 334 L225 272 Z" fill="url(#tie)"/>
+    <path d="M241 331 L255 358 L270 331 L255 332 Z" fill="#f2d4a5" opacity="0.9"/>
+
+    <path d="M188 286 L162 370 L128 400 L104 420 L70 420 L105 338 L150 287 Z" fill="#0f1115" opacity="0.9"/>
+    <path d="M322 286 L348 370 L382 400 L406 420 L442 420 L407 338 L362 287 Z" fill="#0f1115" opacity="0.9"/>
+
+    <path d="M96 420 L157 329 L201 466 L116 466 Z" fill="#0a0d12"/>
+    <path d="M416 420 L355 329 L311 466 L396 466 Z" fill="#0a0d12"/>
+
+    <path d="M214 466 L255 430 L296 466 Z" fill="#d4a76a" opacity="0.7"/>
+  </g>
+</svg>
