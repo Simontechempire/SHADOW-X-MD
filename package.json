@@ -1,0 +1,35 @@
+{
+  "name": "shadow-x-md",
+  "version": "1.0.0",
+  "description": "WHATSAPP BOT CREATED BY SIMON TECH INC",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "whatsapp",
+    "bot",
+    "shadow-x",
+    "automation"
+  ],
+  "author": "Simon Tech Inc",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.4.0",
+    "dotenv": "^16.0.3",
+    "whatsapp-web.js": "^1.20.0",
+    "qrcode-terminal": "^0.12.0",
+    "sqlite3": "^5.1.6",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
