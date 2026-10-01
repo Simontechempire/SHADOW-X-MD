@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHADOW-X-MD Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>SHADOW-X-MD Dashboard</h1>
+      <p>WhatsApp Bot Management Panel</p>
+    </header>
+
+    <main class="main">
+      <section class="dashboard-grid">
+        <div class="card status-card">
+          <h2>Bot Status</h2>
+          <div class="status-value" id="botStatus">Initializing...</div>
+          <p class="status-info" id="statusInfo"></p>
+        </div>
+
+        <div class="card connected-card">
+          <h2>Connected Phone</h2>
+          <div class="phone-number" id="connectedPhone">Not Connected</div>
+          <div class="button-group">
+            <button class="btn btn-secondary" onclick="checkStatus()">Refresh Status</button>
+            <button class="btn btn-danger" onclick="disconnect()">Disconnect</button>
+          </div>
+        </div>
+
+        <div class="card pairing-card">
+          <h2>Pair New Device</h2>
+          <p>Use the pairing page to connect a new WhatsApp account.</p>
+          <a href="/pair" class="btn btn-primary">Go to Pairing Page</a>
+        </div>
+
+        <div class="card owner-card">
+          <h2>Owner Information</h2>
+          <p><strong>Organization:</strong> Simon Tech Inc</p>
+          <p><strong>Owner Phone:</strong> 2348071569915</p>
+          <p><strong>Founder:</strong> 2349166265317</p>
+          <p><strong>Creator:</strong> 238122029123</p>
+        </div>
+      </section>
+
+      <section class="command-section">
+        <h2>Test Bot Commands</h2>
+        <div class="command-box">
+          <div class="button-group">
+            <button class="btn btn-command" onclick="testCommand('hello')">Hello</button>
+            <button class="btn btn-command" onclick="testCommand('owner')">Owner</button>
+            <button class="btn btn-command" onclick="testCommand('status')">Status</button>
+            <button class="btn btn-command" onclick="testCommand('help')">Help</button>
+          </div>
+          <div class="command-response" id="commandResponse"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2026 SHADOW-X-MD | Created by Simon Tech Inc. | All rights reserved</p>
+    </footer>
+  </div>
+
+  <script>
+    async function checkStatus() {
+      try {
+        const response = await fetch('/api/pairing-status');
+        const data = await response.json();
+
+        const botStatusEl = document.getElementById('botStatus');
+        const statusInfoEl = document.getElementById('statusInfo');
+        const connectedPhoneEl = document.getElementById('connectedPhone');
+
+        botStatusEl.textContent = data.status.toUpperCase();
+        botStatusEl.className = `status-value status-${data.status}`;
+
+        if (data.connectedPhone) {
+          connectedPhoneEl.textContent = data.connectedPhone;
+          connectedPhoneEl.className = 'phone-number connected';
+        } else {
+          connectedPhoneEl.textContent = 'Not Connected';
+          connectedPhoneEl.className = 'phone-number';
+        }
+
+        statusInfoEl.textContent = `Updated: ${new Date(data.timestamp).toLocaleTimeString()}`;
+      } catch (error) {
+        console.error('Error checking status:', error);
+      }
+    }
+
+    async function testCommand(command) {
+      try {
+        const response = await fetch('/bot/command', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ command })
+        });
+
+        const data = await response.json();
+        const responseEl = document.getElementById('commandResponse');
+
+        if (data.success) {
+          responseEl.innerHTML = `<div class="response-success"><strong>${command}:</strong> ${data.response}</div>`;
+        } else {
+          responseEl.innerHTML = `<div class="response-error">Error: ${data.error}</div>`;
+        }
+      } catch (error) {
+        document.getElementById('commandResponse').innerHTML = `<div class="response-error">Error: ${error.message}</div>`;
+      }
+    }
+
+    async function disconnect() {
+      try {
+        const response = await fetch('/api/pairing-disconnect', { method: 'POST' });
+        const data = await response.json();
+
+        if (data.success) {
+          checkStatus();
+          alert('Device disconnected successfully!');
+        }
+      } catch (error) {
+        alert('Error disconnecting: ' + error.message);
+      }
+    }
+
+    checkStatus();
+    setInterval(checkStatus, 5000);
+  </script>
+</body>
+</html>
