@@ -1,4 +1,5 @@
 // AI Commands
+const axios = require('axios');
 
 const ai = {
   gpt: {
@@ -9,11 +10,27 @@ const ai = {
       if (!args.length) {
         return { success: false, error: 'Please provide a query' };
       }
-      const query = args.join(' ');
-      return {
-        success: true,
-        response: `🤖 AI Response to "${query}":\nThis feature requires API integration. Coming soon!`
-      };
+      try {
+        const query = args.join(' ');
+        const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+          model: 'gpt-3.5-turbo',
+          messages: [{ role: 'user', content: query }],
+          max_tokens: 150
+        }, {
+          headers: {
+            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        const reply = response.data.choices[0].message.content;
+        return {
+          success: true,
+          response: `🤖 AI Response to "${query}":\n${reply}`
+        };
+      } catch (error) {
+        return { success: false, error: 'AI API error: ' + error.message };
+      }
     }
   },
 
@@ -25,10 +42,24 @@ const ai = {
       if (args.length < 2) {
         return { success: false, error: 'Usage: !translate <language> <text>' };
       }
-      return {
-        success: true,
-        response: `🌐 Translation feature coming soon!`
-      };
+      try {
+        const language = args[0];
+        const text = args.slice(1).join(' ');
+        const response = await axios.post('https://api.mymemory.translated.net/get', null, {
+          params: {
+            q: text,
+            langpair: `en|${language}`
+          }
+        });
+        
+        const translated = response.data.responseData.translatedText;
+        return {
+          success: true,
+          response: `🌐 Translation to ${language}:\n${translated}`
+        };
+      } catch (error) {
+        return { success: false, error: 'Translation failed: ' + error.message };
+      }
     }
   },
 
@@ -42,7 +73,7 @@ const ai = {
       }
       return {
         success: true,
-        response: `📝 Text summarization feature coming soon!`
+        response: `📝 Text summarization requires GPT API integration.`
       };
     }
   },
@@ -57,7 +88,7 @@ const ai = {
       }
       return {
         success: true,
-        response: `🔍 Analysis feature coming soon!`
+        response: `🔍 Sentiment analysis coming soon!`
       };
     }
   }

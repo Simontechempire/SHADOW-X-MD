@@ -1,4 +1,5 @@
 // Downloader Commands
+const axios = require('axios');
 
 const downloader = {
   ytmp3: {
@@ -9,10 +10,26 @@ const downloader = {
       if (!args[0]) {
         return { success: false, error: 'Please provide a YouTube URL' };
       }
-      return {
-        success: true,
-        response: `🎵 YouTube MP3 download feature coming soon!`
-      };
+      try {
+        // Using RapidAPI YouTube converter
+        const response = await axios.get('https://youtube-mp36.p.rapidapi.com/dl', {
+          params: { id: args[0] },
+          headers: {
+            'X-RapidAPI-Key': process.env.RAPIDAPI_KEY,
+            'X-RapidAPI-Host': 'youtube-mp36.p.rapidapi.com'
+          }
+        });
+        
+        return {
+          success: true,
+          response: `🎵 MP3 Download: ${response.data.title}\nLink: ${response.data.link}`
+        };
+      } catch (error) {
+        return {
+          success: false,
+          error: 'Download failed: ' + error.message
+        };
+      }
     }
   },
 
@@ -26,7 +43,7 @@ const downloader = {
       }
       return {
         success: true,
-        response: `🎬 YouTube MP4 download feature coming soon!`
+        response: `🎬 YouTube MP4 download requires premium API access.`
       };
     }
   },
@@ -39,10 +56,25 @@ const downloader = {
       if (!args[0]) {
         return { success: false, error: 'Please provide a TikTok URL' };
       }
-      return {
-        success: true,
-        response: `🎥 TikTok download feature coming soon!`
-      };
+      try {
+        const response = await axios.get('https://tiktok-downloader-and-converter.p.rapidapi.com/v2', {
+          params: { url: args[0] },
+          headers: {
+            'X-RapidAPI-Key': process.env.RAPIDAPI_KEY,
+            'X-RapidAPI-Host': 'tiktok-downloader-and-converter.p.rapidapi.com'
+          }
+        });
+        
+        return {
+          success: true,
+          response: `🎥 TikTok Video Downloaded\nLink: ${response.data.data.download_url}`
+        };
+      } catch (error) {
+        return {
+          success: false,
+          error: 'TikTok download failed: ' + error.message
+        };
+      }
     }
   },
 
@@ -56,7 +88,7 @@ const downloader = {
       }
       return {
         success: true,
-        response: `📷 Instagram download feature coming soon!`
+        response: `📸 Instagram download coming soon!`
       };
     }
   },
@@ -71,7 +103,7 @@ const downloader = {
       }
       return {
         success: true,
-        response: `📺 Facebook download feature coming soon!`
+        response: `📹 Facebook download coming soon!`
       };
     }
   }

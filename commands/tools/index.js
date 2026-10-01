@@ -1,4 +1,6 @@
 // Tools Commands
+const axios = require('axios');
+const QRCode = require('qrcode');
 
 const tools = {
   qrcode: {
@@ -9,10 +11,17 @@ const tools = {
       if (!args.length) {
         return { success: false, error: 'Please provide text for QR code' };
       }
-      return {
-        success: true,
-        response: `📱 QR code generation coming soon!`
-      };
+      try {
+        const text = args.join(' ');
+        const qrDataUrl = await QRCode.toDataURL(text);
+        return {
+          success: true,
+          response: `📱 QR Code generated for: ${text}`,
+          qrCode: qrDataUrl
+        };
+      } catch (error) {
+        return { success: false, error: 'QR code generation failed: ' + error.message };
+      }
     }
   },
 
@@ -36,21 +45,6 @@ const tools = {
     }
   },
 
-  timer: {
-    description: 'Set a timer',
-    usage: '!timer <seconds>',
-    category: 'TOOLS',
-    execute: async (args) => {
-      if (!args[0]) {
-        return { success: false, error: 'Please provide time in seconds' };
-      }
-      return {
-        success: true,
-        response: `⏱️ Timer set for ${args[0]} seconds`
-      };
-    }
-  },
-
   encode: {
     description: 'Encode text to Base64',
     usage: '!encode <text>',
@@ -63,7 +57,7 @@ const tools = {
       const encoded = Buffer.from(text).toString('base64');
       return {
         success: true,
-        response: `🔒 Encoded: ${encoded}`
+        response: `🔐 Encoded: ${encoded}`
       };
     }
   },
@@ -81,7 +75,7 @@ const tools = {
         const decoded = Buffer.from(text, 'base64').toString('utf-8');
         return {
           success: true,
-          response: `🔓 Decoded: ${decoded}`
+          response: `🔑 Decoded: ${decoded}`
         };
       } catch (error) {
         return { success: false, error: 'Invalid Base64 text' };
