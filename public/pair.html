@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHADOW-X-MD Pairing</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #111827);
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .container {
+      width: min(700px, 90%);
+      background: rgba(17, 24, 39, 0.9);
+      border: 1px solid #334155;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    h1 {
+      color: #4ade80;
+      margin-bottom: 10px;
+    }
+    .status {
+      background: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #bfdbfe;
+    }
+    .code-box {
+      background: #14532d;
+      color: #dcfce7;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      letter-spacing: 0.15rem;
+      margin: 20px 0;
+      border: 1px solid #22c55e;
+    }
+    form {
+      display: grid;
+      gap: 16px;
+    }
+    label {
+      font-weight: bold;
+      color: #cbd5e1;
+    }
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 1rem;
+    }
+    button {
+      background: #22c55e;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #16a34a;
+    }
+    .link {
+      display: inline-block;
+      margin-top: 16px;
+      color: #93c5fd;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>SHADOW-X-MD Pairing</h1>
+    <div class="status" id="statusText">Waiting for pairing...</div>
+
+    <div class="code-box" id="pairingCodeBox">-- -- -- --</div>
+
+    <form id="pairForm">
+      <div>
+        <label for="phoneNumber">WhatsApp Phone Number</label>
+        <input id="phoneNumber" name="phoneNumber" type="tel" placeholder="e.g. 2348071569915" required />
+      </div>
+
+      <div>
+        <label for="pairingCode">8-Digit Pairing Code</label>
+        <input id="pairingCode" name="pairingCode" type="text" maxlength="8" placeholder="Enter code received from WhatsApp" required />
+      </div>
+
+      <button type="submit">Connect WhatsApp</button>
+    </form>
+
+    <a href="/" class="link">Back to Dashboard</a>
+  </div>
+
+  <script>
+    const statusText = document.getElementById('statusText');
+    const pairingCodeBox = document.getElementById('pairingCodeBox');
+    const pairForm = document.getElementById('pairForm');
+
+    async function loadPairingCode() {
+      try {
+        const response = await fetch('/api/pairing-code');
+        const data = await response.json();
+        if (data.success) {
+          pairingCodeBox.textContent = data.pairingCode;
+          statusText.textContent = 'Pairing code generated. Please connect the phone number.';
+        }
+      } catch (error) {
+        statusText.textContent = 'Unable to generate pairing code.';
+      }
+    }
+
+    pairForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const phoneNumber = document.getElementById('phoneNumber').value.trim();
+      const pairingCode = document.getElementById('pairingCode').value.trim();
+
+      if (!phoneNumber || !pairingCode) {
+        statusText.textContent = 'Please enter both phone number and pairing code.';
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/pair-phone', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phoneNumber, pairingCode })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          statusText.textContent = `Connected successfully to ${phoneNumber}`;
+          pairingCodeBox.textContent = 'CONNECTED';
+          pairForm.reset();
+        } else {
+          statusText.textContent = data.error || 'Connection failed.';
+        }
+      } catch (error) {
+        statusText.textContent = 'Connection request failed.';
+      }
+    });
+
+    loadPairingCode();
+  </script>
+</body>
+</html>
